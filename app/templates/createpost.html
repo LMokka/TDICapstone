@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+
+{% block title %}Create New Post{% endblock title %}
+
+{% block content%}
+<h2 class ="text-center">Enter a Date (Business Days between Jan 15th 1986 and June 3rd 2020)</h2>
+
+<form method ="post">
+    {{form.csrf_token}}
+    <div class="form-group">
+        {{form.dateinput.label}}
+        {{form.dateinput(class='form-control', placeholder='Enter Date')}}
+
+
+        {{ form.submit(class='btn btn-secondary w-100 mt-3') }}
+    </div>
+</form>
+{% endblock content %}
