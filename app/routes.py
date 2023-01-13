@@ -6,6 +6,7 @@ from app.models import User, Data
 import urllib.request, json, matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import numpy as np
 from io import BytesIO
 import base64
 import os
@@ -56,17 +57,28 @@ def create():
             img = BytesIO()
             y = [d.nasclose for d in data_list[0:10]]
             x = [d.date for d in data_list[0:10]]
-            y1 = [d.sumclose for d in data_list[0:4]]
-            x1 = [d.date for d in data_list[0:4]]
-
+            y1 = [d.sumclose for d in data_list[0:10]]
+            x1 = [d.date for d in data_list[0:10]]
+            y = np.array(y[::-1])
+            x = np.array(x[::-1])
+            y1 = np.array(y1[::-1])
+            x1 = np.array(x1[::-1])
             #plt.plot(x,y)
-            fig,(ax1,ax2) = plt.subplots(1,2)
+            fig,((ax1,ax2),(ax3,ax4)) = plt.subplots(2,2)
+            #fig,(ax3) = plt.subplots(3)
             ax1.set_title('NASDAQ Index Close vs Date')
             ax2.set_title('Summation Index Close vs Date')
             ax1.plot(x,y)
             ax2.plot(x1,y1)
-            ax1.set_xticklabels(x, rotation = 50)
-            ax2.set_xticklabels(x1, rotation = 50)
+            ax3.bar(x,y)
+            ax4.bar(x1,y1)
+            ax1.set_xticks([])
+            ax2.set_xticks([])
+            ax3.set_xticklabels(x, rotation = 90)
+            #ax3.xaxis.set_label_coords(0,0,0)
+            ax4.set_xticklabels(x1, rotation = 90)
+            ax3.set(ylim=(y.min()-1,y.max()+1))
+            ax4.set(ylim=(y1.min()-1,y1.max()+1))
             plt.subplots_adjust(bottom=0.2)
             plt.savefig(img, format='png')
             plt.close()
